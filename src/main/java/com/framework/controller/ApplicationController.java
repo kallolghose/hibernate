@@ -6,12 +6,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/demo")
-public class DemoController {
-
+@RequestMapping("/api")
+public class ApplicationController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
-    public String demo(){
-        return "{\"key\":\"value\"}";
+    public String api(){
+        return "{\"status\":\"running...\"}";
     }
 }
