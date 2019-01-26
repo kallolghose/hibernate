@@ -8,10 +8,7 @@ import com.hibernate.model.AddressDetailsModel;
 import com.hibernate.model.UserDetailsModel;
 import com.hibernate.util.DBOperations;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,13 +21,14 @@ public class UserController {
     private DBOperations db = new DBOperations();
 
     @RequestMapping(path="", method = RequestMethod.POST, produces = "application/json")
-    public CreateUserResponseModel createUser(@RequestBody UserModel userModel){
+    public @ResponseBody CreateUserResponseModel createUser(@RequestBody UserModel userModel){
         ArrayList<String> errors = new ArrayList<String>();
 
         try{
             if(userModel!=null){
                 boolean emailCheck = Utilities.emailValidator.test(userModel.getEmail());
                 boolean usernameCheck = Utilities.checkEmptyStr.test(userModel.getUsername());
+
                 if(emailCheck && usernameCheck){
                     UserDetailsModel udModel = new UserDetailsModel();
                     udModel.setUsername(userModel.getUsername());
@@ -55,7 +53,6 @@ public class UserController {
                     db.writeToDB(udModel);
                     db.writeToDB(addressDetailsModel);
 
-
                     CreateUserResponseModel responseModel = new CreateUserResponseModel();
                     responseModel.setUsername(userModel.getUsername());
                     responseModel.setEmail(userModel.getEmail());
@@ -63,7 +60,10 @@ public class UserController {
                     return responseModel;
                 }
                 else{
-                    errors.add("Email Error/Username Error");
+                    if(!emailCheck)
+                        errors.add("Email Error");
+                    if(!usernameCheck)
+                        errors.add("Username Error");
                 }
             }
         }
@@ -79,7 +79,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/{username:.+}", method = RequestMethod.GET, produces = "application/json")
-    public UserModel getUser(@PathVariable("username")String username){
+    public @ResponseBody UserModel getUser(@PathVariable("username")String username){
         System.out.println("USERNAME : " + username);
         ArrayList<String> error = new ArrayList<String>();
         try{

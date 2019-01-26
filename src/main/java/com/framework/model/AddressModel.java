@@ -1,5 +1,9 @@
 package com.framework.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.framework.serializers.AddressModelSerializer;
+
+@JsonSerialize(using = AddressModelSerializer.class)
 public class AddressModel {
 
     private String line1;

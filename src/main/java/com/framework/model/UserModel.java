@@ -1,7 +1,13 @@
 package com.framework.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.framework.deserializers.Date.CommonDateDeserializer;
+import com.framework.serializers.UserModelSerializer;
+
 import java.util.Date;
 
+@JsonSerialize(using = UserModelSerializer.class)
 public class UserModel {
 
     private String username;
@@ -9,6 +15,7 @@ public class UserModel {
     private String password;
     private AddressModel address;
     private String email;
+    @JsonDeserialize(using = CommonDateDeserializer.class)
     private Date dateOfBirth;
     private Long mobileNumber;
 
